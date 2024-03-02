@@ -7,6 +7,7 @@ declare global {
       readonly JWT_SECRET: string;
       readonly JWT_EXPIRES: string;
       readonly COOKIE_EXPIRES_IN: number;
+      readonly DATABASE_URL: string;
     }
   }
 }
