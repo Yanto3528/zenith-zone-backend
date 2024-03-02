@@ -7,7 +7,7 @@ import { userServices } from "./users.services";
 
 const userRouter = express.Router();
 
-userRouter.use(requireAuth());
+userRouter.use(requireAuth(["ADMIN"]));
 
 userRouter.get(
   "/",

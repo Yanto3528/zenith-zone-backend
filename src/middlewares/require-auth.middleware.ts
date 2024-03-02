@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import jwt from "jsonwebtoken";
-import { Prisma } from "@prisma/client";
+import { Prisma, ROLE } from "@prisma/client";
 
 import { catchAsync } from "@/utils/helper.utils";
-import { NotAuthorizedError } from "@/lib/errors";
+import { ForbiddenError, NotAuthorizedError } from "@/lib/errors";
 import { prisma } from "@/lib/prisma";
 
 const jwtSecret = process.env.JWT_SECRET || "";
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const requireAuth = () =>
+export const requireAuth = (roles?: ROLE[]) =>
   catchAsync(async (req, res, next) => {
     const { token } = req.cookies;
     if (!token) {
@@ -37,6 +37,12 @@ export const requireAuth = () =>
     if (!user) {
       return next(
         new NotAuthorizedError("User belonging to this token no longer exists"),
+      );
+    }
+
+    if (roles && roles.length > 0 && !roles.includes(user.role)) {
+      return next(
+        new ForbiddenError("You are not allowed to access this resource."),
       );
     }
 
