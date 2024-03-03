@@ -8,7 +8,7 @@ declare global {
 
 beforeEach(async () => {
   vi.clearAllMocks();
-  await prisma.$transaction([prisma.user.deleteMany()]);
+  await prisma.user.deleteMany();
 });
 
 global.signin = (id: string) => {
