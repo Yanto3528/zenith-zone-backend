@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/build
-      - uses: - uses: KengoTODA/actions-setup-docker-compose@v1
+      - uses: KengoTODA/actions-setup-docker-compose@v1
         with:
-          version: '2.16.0'
+          version: "2.16.0"
       - name: Run tests
         run: pnpm test:int:ci
