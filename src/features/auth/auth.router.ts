@@ -1,6 +1,6 @@
 import express from "express";
-import { validateRequestBody } from "zod-express-middleware";
 
+import { validateRequestBody } from "@/middlewares/request-validation.middleware";
 import { catchAsync } from "@/utils/helper.utils";
 import { BadRequestError } from "@/lib/errors";
 

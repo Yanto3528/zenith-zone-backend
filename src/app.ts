@@ -7,6 +7,7 @@ import helmet from "helmet";
 import { errorHandler } from "./middlewares/error-handler.middleware";
 import { authRouter } from "./features/auth/auth.router";
 import { userRouter } from "./features/users/users.router";
+import { addressRouter } from "./features/addresses/addresses.router";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/addresses", addressRouter);
 
 app.use(errorHandler);
 

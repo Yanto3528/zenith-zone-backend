@@ -1,15 +1,20 @@
 import { ErrorRequestHandler } from "express";
+import { ZodError } from "zod";
 
 import { logger } from "@/lib/logger";
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   const status = err.status || "error";
-  let { message } = err;
+  const { message } = err;
+  let errors = [{ message }];
 
   if (err.name === "ZodError") {
-    const firstIssue = err.issues[0];
-    message = `${firstIssue.path[0]}: ${firstIssue.message}`;
+    errors = (err as ZodError).issues.map((issue) => ({
+      message: issue.message,
+      path: issue.path,
+      code: issue.code,
+    }));
     statusCode = 400;
   }
 
@@ -17,6 +22,6 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   res.status(statusCode).json({
     status,
-    message,
+    errors,
   });
 };

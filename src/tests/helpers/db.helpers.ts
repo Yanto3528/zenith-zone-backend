@@ -17,3 +17,25 @@ export const createTestUser = async () => {
 
   return user;
 };
+
+export const createTestAddress = async (userId: string, isDefault = false) => {
+  const address = await prisma.address.create({
+    data: {
+      firstName: "John",
+      lastName: "doe",
+      streetAddress: "123 Main Street",
+      streetAddress2: "",
+      city: "New York",
+      country: "USA",
+      postalCode: "40001",
+      isDefault,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
+
+  return address;
+};
