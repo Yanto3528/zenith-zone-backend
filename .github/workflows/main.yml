@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+jobs:
+  build:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./github/actions/build
+      - name: set env variables
+        run: |
+          touch .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo JWT_EXPIRES=${{ secrets.JWT_EXPIRES }} >> .env
+          echo COOKIE_EXPIRES_IN=${{ secrets.COOKIE_EXPIRES_IN }} >> .env
+      - name: Run linter
+        run: yarn lint
+      - name: Run test
+        run: yarn test
