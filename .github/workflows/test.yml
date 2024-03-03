@@ -1,0 +1,18 @@
+name: Tests
+on:
+  pull_request:
+    branches:
+      - master
+env:
+  DATABASE_URL: mongodb://localhost:27018/test?directConnection=true
+  JWT_SECRET: supersecret
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/docker-compose
+    - name: Run tests
+        run: pnpm test:int:ci

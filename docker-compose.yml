@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: zenith-zone-mongo
+    restart: always
+    volumes:
+      - mongodb_volume_data:/data/db
+    ports:
+      - 27018:27018
+volumes:
+  mongodb_volume_data:

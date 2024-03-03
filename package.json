@@ -7,6 +7,8 @@
     "dev": "nodemon -r tsconfig-paths/register ./src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:int:ci": "./scripts/run-integration.sh",
+    "test:int:ui": "./scripts/run-integration.sh --ui",
     "test:coverage": "vitest run --coverage",
     "build": "tsc && tsc-alias",
     "prepare": "husky",
