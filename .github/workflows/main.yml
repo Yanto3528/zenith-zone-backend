@@ -22,6 +22,6 @@ jobs:
           echo JWT_EXPIRES=${{ secrets.JWT_EXPIRES }} >> .env
           echo COOKIE_EXPIRES_IN=${{ secrets.COOKIE_EXPIRES_IN }} >> .env
       - name: Run linter
-        run: yarn lint
+        run: pnpm lint
       - name: Run test
-        run: yarn test
+        run: pnpm test
