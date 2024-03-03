@@ -8,7 +8,7 @@ on:
       - master
 
 env:
-  DATABASE_URL: mongodb://localhost:27018/test?directConnection=true
+  DATABASE_URL: mongodb://localhost:27018/test?directConnection=true&authSource=admin&retryWrites=true&w=majority
   JWT_SECRET: supersecret
 
 jobs:
