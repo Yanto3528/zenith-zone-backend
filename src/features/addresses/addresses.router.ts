@@ -27,7 +27,7 @@ addressRouter.get(
   catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    const address = await addressServices.findAddressById(id);
+    const address = await addressServices.findAddressById(id, req.user.id);
 
     res.status(200).json({
       status: "success",

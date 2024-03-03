@@ -71,6 +71,19 @@ describe("Auth routes", () => {
         })
         .expect(400);
     });
+
+    test("when passing in email that already exists, it should return 400 error", async () => {
+      const anotherUser = await createTestUser();
+      await request(app)
+        .post("/api/v1/auth/signup")
+        .send({
+          firstName: "John",
+          lastName: "Doe",
+          email: anotherUser.email,
+          password: "123456",
+        })
+        .expect(400);
+    });
   });
 
   describe("POST /api/v1/auth/login", () => {

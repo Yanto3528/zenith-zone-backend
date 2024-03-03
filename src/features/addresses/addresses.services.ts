@@ -1,4 +1,8 @@
-import { NotAuthorizedError, NotFoundError } from "@/lib/errors";
+import {
+  ForbiddenError,
+  NotAuthorizedError,
+  NotFoundError,
+} from "@/lib/errors";
 
 import { addressRepositories } from "./addresses.repositories";
 import { AddressCreateInput, AddressUpdateInput } from "./addresses.types";
@@ -7,8 +11,17 @@ class AddressServices {
   findAddressesByUserId(userId: string) {
     return addressRepositories.findAddressesByUserId(userId);
   }
-  findAddressById(id: string) {
-    return addressRepositories.findAddressById(id);
+  async findAddressById(id: string, userId: string) {
+    const address = await addressRepositories.findAddressById(id);
+    if (!address) {
+      throw new NotFoundError();
+    }
+
+    if (address.userId !== userId) {
+      throw new ForbiddenError();
+    }
+
+    return address;
   }
   createAddress(input: AddressCreateInput) {
     return addressRepositories.createAddress(input);

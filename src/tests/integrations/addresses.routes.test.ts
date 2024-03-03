@@ -9,11 +9,66 @@ import { createTestAddress, createTestUser } from "../helpers/db.helpers";
 
 const path = "/api/v1/addresses";
 
-describe("Adreeses routes", () => {
+describe("Adresses routes", () => {
   let user: User;
   beforeEach(async () => {
     user = await createTestUser();
   });
+
+  describe(`GET ${path}`, () => {
+    test("it should return a list of addresses that is owned by currently logged in user", async () => {
+      await createTestAddress(user.id);
+      await createTestAddress(user.id);
+
+      const response = await request(app)
+        .get(path)
+        .set("Cookie", global.signin(user.id))
+        .expect(200);
+
+      expect(response.body.data.length).toBe(2);
+    });
+
+    test("when user is not logged in, it should return 401 error", async () => {
+      await createTestAddress(user.id);
+      await request(app).get(path).expect(401);
+    });
+  });
+
+  describe(`GET ${path}/:id`, () => {
+    test("when currently logged in user is the owner of the address, it should return the address", async () => {
+      const address = await createTestAddress(user.id);
+
+      const response = await request(app)
+        .get(`${path}/${address.id}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(200);
+
+      expect(response.body.data.id).toBe(address.id);
+    });
+
+    test("when attempting to fetch a address that does not exist, it should return 404 error", async () => {
+      await request(app)
+        .get(`${path}/${new ObjectId()}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(404);
+    });
+
+    test("when currently logged in user is not the owner of the address, it should return 403 error", async () => {
+      const anotherUser = await createTestUser();
+      const address = await createTestAddress(anotherUser.id);
+
+      await request(app)
+        .get(`${path}/${address.id}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(403);
+    });
+
+    test("when user is not logged in, it should return 401 error", async () => {
+      const address = await createTestAddress(user.id);
+      await request(app).get(`${path}/${address.id}`).expect(401);
+    });
+  });
+
   describe(`POST ${path}`, () => {
     test("when passing in the correct data, it should create a new address", async () => {
       const response = await request(app)
@@ -140,6 +195,47 @@ describe("Adreeses routes", () => {
         .send({})
         .set("Cookie", global.signin(user.id))
         .expect(404);
+    });
+  });
+
+  describe(`DELETE ${path}`, () => {
+    test("when passing in existing address id, it should deletes the record", async () => {
+      const address = await createTestAddress(user.id);
+      const addressExist = await prisma.address.findFirst({
+        where: { id: address.id },
+      });
+      expect(addressExist).toBeDefined();
+      await request(app)
+        .delete(`${path}/${address.id}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(200);
+
+      const deletedAddress = await prisma.address.findFirst({
+        where: { id: address.id },
+      });
+      expect(deletedAddress).toBeNull();
+    });
+
+    test("when passing in the wrong address id, it should returns 404 error", async () => {
+      await createTestAddress(user.id);
+      await request(app)
+        .delete(`${path}/${new ObjectId()}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(404);
+    });
+
+    test("when attempting to delete another user address, it should return 401 error", async () => {
+      const anotherUser = await createTestUser();
+      const address = await createTestAddress(anotherUser.id);
+      await request(app)
+        .delete(`${path}/${address.id}`)
+        .set("Cookie", global.signin(user.id))
+        .expect(401);
+    });
+
+    test("when attempting to delete address without login, it should return 401 error", async () => {
+      const address = await createTestAddress(user.id);
+      await request(app).delete(`${path}/${address.id}`).expect(401);
     });
   });
 });
