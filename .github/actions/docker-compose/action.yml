@@ -3,9 +3,15 @@ description: "Sets up docker-compose"
 runs:
   using: "composite"
   steps:
-    - name: Make plugin executable
+    - name: Create empty docker-compose directory
       shell: bash
-      run: sudo chmod +x /usr/local/bin/docker-compose
+      run: mkdir -p /usr/local/bin
+    - name: Give bin directory permission for writing files
+      shell: bash
+      run: chmod 755 /usr/local/bin
     - name: Download Docker-Compose plugin
       shell: bash
       run: curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    - name: Make plugin executable
+      shell: bash
+      run: sudo chmod +x /usr/local/bin/docker-compose
