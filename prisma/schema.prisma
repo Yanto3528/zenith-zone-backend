@@ -41,7 +41,37 @@ model Address {
   userId         String? @db.ObjectId
 }
 
+model Attribute {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  label           String
+  code            String           @unique
+  type            AttributeType    @default(DROPDOWN)
+  isRequired      Boolean
+  attributeValues AttributeValue[]
+  metadata        Metadata[]
+  isPublic        Boolean          @default(true)
+}
+
+type AttributeValue {
+  code  String
+  name  String
+  value String?
+}
+
+type Metadata {
+  code  String
+  value String
+}
+
 enum ROLE {
   ADMIN
   USER
+}
+
+enum AttributeType {
+  DROPDOWN
+  MULTI_SELECT
+  TEXT
+  RICH_TEXT
+  SWATCH
 }
