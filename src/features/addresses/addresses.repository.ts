@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 import { AddressCreateInput, AddressUpdateInput } from "./addresses.types";
 
-class AddressRepositories {
+class AddressRepository {
   findAddressesByUserId(userId: string) {
     return prisma.address.findMany({
       where: { userId },
@@ -68,4 +68,4 @@ class AddressRepositories {
   }
 }
 
-export const addressRepositories = new AddressRepositories();
+export const addressRepository = new AddressRepository();

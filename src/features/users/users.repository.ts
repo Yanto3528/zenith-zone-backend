@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 import { userSelect } from "./users.db";
 
-class UserRepositories {
+class UserRepository {
   findUsers() {
     return prisma.user.findMany({ select: userSelect });
   }
@@ -31,4 +31,4 @@ class UserRepositories {
   }
 }
 
-export const userRepositories = new UserRepositories();
+export const userRepository = new UserRepository();

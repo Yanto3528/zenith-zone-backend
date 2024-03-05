@@ -4,7 +4,7 @@ import { validateRequestBody } from "@/middlewares/request-validation.middleware
 import { catchAsync } from "@/utils/helper.utils";
 import { requireAuth } from "@/middlewares/require-auth.middleware";
 
-import { addressServices } from "./addresses.services";
+import { addressService } from "./addresses.service";
 import { createAddressSchema, updateAddressSchema } from "./addresses.schema";
 
 const addressRouter = express.Router();
@@ -14,7 +14,7 @@ addressRouter.use(requireAuth());
 addressRouter.get(
   "/",
   catchAsync(async (req, res) => {
-    const addresses = await addressServices.findAddressesByUserId(req.user.id);
+    const addresses = await addressService.findAddressesByUserId(req.user.id);
 
     res.status(200).json({
       status: "success",
@@ -27,7 +27,7 @@ addressRouter.get(
   catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    const address = await addressServices.findAddressById(id, req.user.id);
+    const address = await addressService.findAddressById(id, req.user.id);
 
     res.status(200).json({
       status: "success",
@@ -50,7 +50,7 @@ addressRouter.post(
       streetAddress2,
     } = req.body;
 
-    const newAddress = await addressServices.createAddress({
+    const newAddress = await addressService.createAddress({
       firstName,
       lastName,
       city,
@@ -85,7 +85,7 @@ addressRouter.put(
       isDefault,
     } = req.body;
 
-    const updatedAddress = await addressServices.updateAddress(id, {
+    const updatedAddress = await addressService.updateAddress(id, {
       firstName,
       lastName,
       city,
@@ -109,7 +109,7 @@ addressRouter.delete(
   catchAsync(async (req, res) => {
     const { id } = req.params;
 
-    await addressServices.deleteAddress(id, req.user.id);
+    await addressService.deleteAddress(id, req.user.id);
 
     res.status(200).json({
       status: "success",

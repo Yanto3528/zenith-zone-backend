@@ -4,15 +4,15 @@ import {
   NotFoundError,
 } from "@/lib/errors";
 
-import { addressRepositories } from "./addresses.repositories";
+import { addressRepository } from "./addresses.repository";
 import { AddressCreateInput, AddressUpdateInput } from "./addresses.types";
 
-class AddressServices {
+class AddressService {
   findAddressesByUserId(userId: string) {
-    return addressRepositories.findAddressesByUserId(userId);
+    return addressRepository.findAddressesByUserId(userId);
   }
   async findAddressById(id: string, userId: string) {
-    const address = await addressRepositories.findAddressById(id);
+    const address = await addressRepository.findAddressById(id);
     if (!address) {
       throw new NotFoundError();
     }
@@ -24,10 +24,10 @@ class AddressServices {
     return address;
   }
   createAddress(input: AddressCreateInput) {
-    return addressRepositories.createAddress(input);
+    return addressRepository.createAddress(input);
   }
   async updateAddress(id: string, input: AddressUpdateInput) {
-    const address = await addressRepositories.findAddressById(id);
+    const address = await addressRepository.findAddressById(id);
     if (!address) {
       throw new NotFoundError("Address with this id does not exist");
     }
@@ -38,10 +38,10 @@ class AddressServices {
       );
     }
 
-    return addressRepositories.updateAddress(id, input);
+    return addressRepository.updateAddress(id, input);
   }
   async deleteAddress(id: string, userId: string) {
-    const address = await addressRepositories.findAddressById(id);
+    const address = await addressRepository.findAddressById(id);
     if (!address) {
       throw new NotFoundError("Address with this id does not exist");
     }
@@ -52,8 +52,8 @@ class AddressServices {
       );
     }
 
-    return addressRepositories.deleteAddress(id);
+    return addressRepository.deleteAddress(id);
   }
 }
 
-export const addressServices = new AddressServices();
+export const addressService = new AddressService();

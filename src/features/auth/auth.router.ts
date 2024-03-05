@@ -4,7 +4,7 @@ import { validateRequestBody } from "@/middlewares/request-validation.middleware
 import { catchAsync } from "@/utils/helper.utils";
 import { BadRequestError } from "@/lib/errors";
 
-import { userServices } from "../users/users.services";
+import { userService } from "../users/users.service";
 
 import { signupBodySchema, loginBodySchema } from "./auth.schema";
 import { createAndSendToken, matchPassword } from "./auth.helpers";
@@ -17,12 +17,12 @@ authRouter.post(
   catchAsync(async (req, res) => {
     const { email, firstName, lastName, password } = req.body;
 
-    const existingUser = await userServices.findUserByEmail(email);
+    const existingUser = await userService.findUserByEmail(email);
     if (existingUser) {
       throw new BadRequestError("User with this email already exist.");
     }
 
-    const user = await userServices.createUser({
+    const user = await userService.createUser({
       firstName,
       lastName,
       email,
@@ -37,7 +37,7 @@ authRouter.post(
   validateRequestBody(loginBodySchema),
   catchAsync(async (req, res) => {
     const { email, password } = req.body;
-    const existingUser = await userServices.findUserByEmail(email, {
+    const existingUser = await userService.findUserByEmail(email, {
       selectPassword: true,
     });
 
