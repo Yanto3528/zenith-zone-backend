@@ -5,15 +5,15 @@ import { prisma } from "@/lib/prisma";
 import { userSelect } from "./users.db";
 
 class UserRepository {
-  findUsers() {
+  find() {
     return prisma.user.findMany({ select: userSelect });
   }
 
-  findUserById(id: string) {
+  findById(id: string) {
     return prisma.user.findFirst({ where: { id }, select: userSelect });
   }
 
-  findUserByEmail(email: string, selectPassword = false) {
+  findByEmail(email: string, selectPassword = false) {
     return prisma.user.findUnique({
       where: { email },
       select: {
@@ -23,7 +23,7 @@ class UserRepository {
     });
   }
 
-  createUser(createUserInput: Prisma.UserCreateInput) {
+  create(createUserInput: Prisma.UserCreateInput) {
     return prisma.user.create({
       data: createUserInput,
       select: userSelect,

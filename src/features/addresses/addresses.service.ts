@@ -9,10 +9,10 @@ import { AddressCreateInput, AddressUpdateInput } from "./addresses.types";
 
 class AddressService {
   findAddressesByUserId(userId: string) {
-    return addressRepository.findAddressesByUserId(userId);
+    return addressRepository.findByUserId(userId);
   }
   async findAddressById(id: string, userId: string) {
-    const address = await addressRepository.findAddressById(id);
+    const address = await addressRepository.findById(id);
     if (!address) {
       throw new NotFoundError();
     }
@@ -24,10 +24,10 @@ class AddressService {
     return address;
   }
   createAddress(input: AddressCreateInput) {
-    return addressRepository.createAddress(input);
+    return addressRepository.create(input);
   }
   async updateAddress(id: string, input: AddressUpdateInput) {
-    const address = await addressRepository.findAddressById(id);
+    const address = await addressRepository.findById(id);
     if (!address) {
       throw new NotFoundError("Address with this id does not exist");
     }
@@ -38,10 +38,10 @@ class AddressService {
       );
     }
 
-    return addressRepository.updateAddress(id, input);
+    return addressRepository.update(id, input);
   }
   async deleteAddress(id: string, userId: string) {
-    const address = await addressRepository.findAddressById(id);
+    const address = await addressRepository.findById(id);
     if (!address) {
       throw new NotFoundError("Address with this id does not exist");
     }
@@ -52,7 +52,7 @@ class AddressService {
       );
     }
 
-    return addressRepository.deleteAddress(id);
+    return addressRepository.delete(id);
   }
 }
 

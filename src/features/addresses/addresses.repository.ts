@@ -3,18 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { AddressCreateInput, AddressUpdateInput } from "./addresses.types";
 
 class AddressRepository {
-  findAddressesByUserId(userId: string) {
+  findByUserId(userId: string) {
     return prisma.address.findMany({
       where: { userId },
       orderBy: [{ isDefault: "desc" }],
     });
   }
 
-  findAddressById(id: string) {
+  findById(id: string) {
     return prisma.address.findFirst({ where: { id } });
   }
 
-  createAddress({ userId, ...input }: AddressCreateInput) {
+  create({ userId, ...input }: AddressCreateInput) {
     return prisma.address.create({
       data: {
         ...input,
@@ -25,7 +25,7 @@ class AddressRepository {
     });
   }
 
-  async updateAddress(id: string, { userId, ...input }: AddressUpdateInput) {
+  async update(id: string, { userId, ...input }: AddressUpdateInput) {
     if (!input.isDefault) {
       return prisma.address.update({
         where: { id },
@@ -61,7 +61,7 @@ class AddressRepository {
     return newUpdatedAddress;
   }
 
-  deleteAddress(id: string) {
+  delete(id: string) {
     return prisma.address.delete({
       where: { id },
     });

@@ -5,11 +5,11 @@ import { userRepository } from "./users.repository";
 
 class UserService {
   findUsers() {
-    return userRepository.findUsers();
+    return userRepository.find();
   }
 
   findUserById(id: string) {
-    return userRepository.findUserById(id);
+    return userRepository.findById(id);
   }
 
   async findUserByEmail(
@@ -18,13 +18,13 @@ class UserService {
   ) {
     const { selectPassword } = options;
 
-    return userRepository.findUserByEmail(email, selectPassword);
+    return userRepository.findByEmail(email, selectPassword);
   }
 
   async createUser(createUserInput: Prisma.UserCreateInput) {
     createUserInput.password = await bcrypt.hash(createUserInput.password, 10);
 
-    return userRepository.createUser(createUserInput);
+    return userRepository.create(createUserInput);
   }
 }
 
