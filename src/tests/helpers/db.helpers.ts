@@ -41,3 +41,40 @@ export const createTestAddress = async (userId: string, isDefault = false) => {
 
   return address;
 };
+
+export const createTestAttribute = async () => {
+  const attribute = await prisma.attribute.create({
+    data: {
+      code: "color",
+      label: "Color",
+      isRequired: true,
+      isPublic: true,
+      metadata: [
+        {
+          code: "test",
+          value: "test",
+        },
+      ],
+      type: "SWATCH",
+      attributeValues: [
+        {
+          code: "red",
+          name: "Red",
+          value: "#ff0000",
+        },
+        {
+          code: "green",
+          name: "Green",
+          value: "#00ff00",
+        },
+        {
+          code: "blue",
+          name: "Blue",
+          value: "#0000ff",
+        },
+      ],
+    },
+  });
+
+  return attribute;
+};
