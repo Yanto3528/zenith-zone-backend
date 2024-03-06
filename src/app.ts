@@ -10,6 +10,7 @@ import { userRouter } from "./features/users/users.router";
 import { addressRouter } from "./features/addresses/addresses.router";
 import { attributeRouter } from "./features/attributes/attributes.router";
 import { attributeAdminRouter } from "./features/attributes/attributes.admin-router";
+import { productTypesAdminRouter } from "./features/product-types/product-types.admin-router";
 
 const app = express();
 
@@ -22,8 +23,11 @@ app.use(cookieParser());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/addresses", addressRouter);
-app.use("/api/v1/admin/attributes", attributeAdminRouter);
 app.use("/api/v1/attributes", attributeRouter);
+
+// Admin routes
+app.use("/api/v1/admin/attributes", attributeAdminRouter);
+app.use("/api/v1/admin/product-types", productTypesAdminRouter);
 
 app.use(errorHandler);
 

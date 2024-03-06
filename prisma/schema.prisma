@@ -50,6 +50,17 @@ model Attribute {
   attributeValues AttributeValue[]
   metadata        Metadata[]
   isPublic        Boolean          @default(true)
+  ProductType     ProductType[]    @relation(fields: [productTypeIds], references: [id])
+  productTypeIds  String[]         @db.ObjectId
+}
+
+model ProductType {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  isShippable  Boolean
+  metadata     Metadata[]
+  attributes   Attribute[] @relation(fields: [attributeIds], references: [id])
+  attributeIds String[]    @db.ObjectId
 }
 
 type AttributeValue {
