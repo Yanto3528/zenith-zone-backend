@@ -50,7 +50,7 @@ model Attribute {
   attributeValues AttributeValue[]
   metadata        Metadata[]
   isPublic        Boolean          @default(true)
-  ProductType     ProductType[]    @relation(fields: [productTypeIds], references: [id])
+  productType     ProductType[]    @relation(fields: [productTypeIds], references: [id])
   productTypeIds  String[]         @db.ObjectId
 }
 
@@ -61,6 +61,20 @@ model ProductType {
   metadata     Metadata[]
   attributes   Attribute[] @relation(fields: [attributeIds], references: [id])
   attributeIds String[]    @db.ObjectId
+  Product      Product[]
+}
+
+model Product {
+  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String
+  medias             Media[]
+  metadata           Metadata[]
+  productType        ProductType         @relation(fields: [productTypeId], references: [id])
+  selectedAttributes SelectedAttribute[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  productTypeId      String              @db.ObjectId
 }
 
 type AttributeValue {
@@ -72,6 +86,17 @@ type AttributeValue {
 type Metadata {
   code  String
   value String
+}
+
+type Media {
+  url String
+  alt String
+}
+
+type SelectedAttribute {
+  attributeId String   @db.ObjectId
+  value       String?
+  values      String[]
 }
 
 enum ROLE {
