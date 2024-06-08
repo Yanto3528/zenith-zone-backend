@@ -78,3 +78,19 @@ export const createTestAttribute = async () => {
 
   return attribute;
 };
+
+export const createTestProductType = async () => {
+  const attribute = await createTestAttribute();
+  const productType = await prisma.productType.create({
+    data: {
+      isShippable: false,
+      name: "Computer",
+      attributeIds: [attribute.id],
+    },
+    include: {
+      attributes: true,
+    },
+  });
+
+  return productType;
+};
